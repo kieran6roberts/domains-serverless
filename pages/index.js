@@ -1,5 +1,3 @@
-import { data } from "autoprefixer";
-import Link from "next/link";
 import { useState } from "react";
 
 export default function Home() {
@@ -25,8 +23,8 @@ export default function Home() {
     setDomain(data.data.domain);
   };
 
-  const handleAddDNSRecord = async (record) => {
-    const response = await fetch("/api/addDNSRecord", {
+  const handleAddDNSRecord = async () => {
+    const response = await fetch("/api/addRecordAndCertificate", {
       method: "POST",
       headers: {
               "Content-Type": "application/json"
@@ -49,11 +47,9 @@ export default function Home() {
       <h1 className="mb-8">
         Welcome to Hashnode
       </h1>
-      <Link href="/blog" passHref>
-        <a className="p-2 bg-pink-200">
-          To blog
-        </a>
-      </Link>
+      <a href={domain ? `https://blog.${domain.name}` : "http://localhost:3000/blog"} className="p-2 bg-pink-200">
+        To blog
+      </a>
       <form onSubmit={handleCustomDomainSubmit}>
         <label 
         className="mr-4" 

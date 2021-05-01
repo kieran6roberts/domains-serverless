@@ -1,6 +1,5 @@
-export default async function createDomain (req, res) {
+export default async function addRecordAndCertificate (req, res) {
     const { name, type, value, ttl } = req.body;
-    console.log(req.body.domain)
 
     const dnsRes = await fetch(`https://api.vercel.com/v2/domains/${req.body.domain}/records`, {
         method: "POST",
@@ -29,6 +28,8 @@ export default async function createDomain (req, res) {
             domains: [req.body.domain],
         })
     });
+
+        console.log(req.body.domain)
 
     const certData = await certRes.json();
     console.log(certData)
