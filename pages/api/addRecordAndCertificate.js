@@ -5,7 +5,7 @@ export default async function addRecordAndCertificate (req, res) {
         method: "POST",
         headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer wAAUPWRAGyfB4t3ygsgTWGfE"
+        "Authorization": `Bearer ${process.env.VERCEL_TEST_TOKEN}`
         },
         body: JSON.stringify({
             name: name,
@@ -22,14 +22,12 @@ export default async function addRecordAndCertificate (req, res) {
         method: "POST",
         headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer wAAUPWRAGyfB4t3ygsgTWGfE"
+        "Authorization": `Bearer ${process.env.VERCEL_TEST_TOKEN}`
         },
         body: JSON.stringify({
             domains: [req.body.domain],
         })
     });
-
-        console.log(req.body.domain)
 
     const certData = await certRes.json();
     console.log(certData)

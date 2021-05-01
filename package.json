@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "yarn tailwind && next dev",
     "tailwind": "npx tailwindcss build src/styles/globals.css -o src/styles/app.css",
     "build": "yarn tailwind && next build",
     "start": "next start"

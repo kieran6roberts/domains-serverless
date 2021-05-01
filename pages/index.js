@@ -47,7 +47,7 @@ export default function Home() {
       <h1 className="mb-8">
         Welcome to Hashnode
       </h1>
-      <a href={domain ? `https://blog.${domain.name}` : "http://localhost:3000/blog"} className="p-2 bg-pink-200">
+      <a href={domain ? `https://${domain.name}` : "http://localhost:3000/blog"} className="p-2 bg-pink-200">
         To blog
       </a>
       <form onSubmit={handleCustomDomainSubmit}>
@@ -68,7 +68,7 @@ export default function Home() {
           {domain ? 
           <>
           <p className="mb-4">
-            Your custom domain: {domain.name}
+            Custom domain has been added: {domain.name}
           </p>
           <p className="mb-4">
             Next we need to add the following CNAME record: cname.vercel-dns.com 
