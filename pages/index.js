@@ -18,9 +18,9 @@ export default function Home() {
       body: JSON.stringify(input)
     });
 
-    const data = await response.json();
+    const { data } = await response.json();
     console.log(data)
-    setDomain(data.data.domain);
+    setDomain({ ...data.domain, domainError: data?.error ?? null });
   };
 
   const handleAddDNSRecord = async () => {
@@ -45,7 +45,7 @@ export default function Home() {
       ...domain,
       ssl: data?.cert?.uid ? true : null,
       record: data?.dns.uid ? true : null,
-      error: data?.cert?.error ?? null
+      certError: data?.cert?.error ?? null
     });
   }
 
@@ -64,15 +64,22 @@ export default function Home() {
           Enter your custom domain:
           </label>
         <input 
-        className="p-2 mb-8 border-2 border-gray-900" 
+        className="p-2 mb-8 mr-8 border-2 border-gray-900" 
         onChange={handleInputChange}
         id="domain" 
         type="text" 
         value={input}
         />
+        <button className="p-2 bg-pink-300" type="submit">
+          Submit
+        </button>
       </form>
+      {domain?.domainError ? 
+      <p>
+        {domain.domainError.message}
+      </p> : null}
       <div>
-          {domain ? 
+          {domain && !domain.domainError ? 
           <>
           <p className="mb-4">
             The following custom domain has been added successfully: {domain.name}
