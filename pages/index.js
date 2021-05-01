@@ -54,7 +54,7 @@ export default function Home() {
       <h1 className="mb-8">
         Welcome to Hashnode
       </h1>
-      <a href={domain?.ssl && domain?.record ? `https://${domain.name}` : "http://localhost:3000/blog"} className="block p-2 mb-8 bg-pink-200 w-max">
+      <a href={domain?.ssl && domain?.record ? `https://${domain.name}` : "https://hashnode-project-serverless.vercel.app/blog"} className="block p-2 mb-8 bg-pink-200 w-max">
         To blog
       </a>
       <form onSubmit={handleCustomDomainSubmit}>
