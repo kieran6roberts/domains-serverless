@@ -1,15 +1,37 @@
 export default async function createDomain (req, res) {
-  const domainRes = await fetch(`https://api.vercel.com/v2/domains/${req.body.name}/records`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer wAAUPWRAGyfB4t3ygsgTWGfE"
-    },
-    body: JSON.stringify(req.body)
-  });
+    const { name, type, value, ttl } = req.body;
+    console.log(req.body.domain)
 
-  const data = await domainRes.json();
-  console.log(data)
+    const dnsRes = await fetch(`https://api.vercel.com/v2/domains/${req.body.domain}/records`, {
+        method: "POST",
+        headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer wAAUPWRAGyfB4t3ygsgTWGfE"
+        },
+        body: JSON.stringify({
+            name: name,
+            type: type,
+            value: value,
+            ttl: ttl
+        })
+    });
 
-  return res.json({ data });
+    const dnsData = await dnsRes.json();
+    console.log(dnsData)
+
+      const certRes = await fetch(`https://api.vercel.com/v3/now/certs`, {
+        method: "POST",
+        headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer wAAUPWRAGyfB4t3ygsgTWGfE"
+        },
+        body: JSON.stringify({
+            domains: [req.body.domain],
+        })
+    });
+
+    const certData = await certRes.json();
+    console.log(certData)
+
+    return res.json({ dns: dnsData, cert: certData });
 }

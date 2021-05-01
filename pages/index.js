@@ -33,7 +33,7 @@ export default function Home() {
           },
       body: JSON.stringify({
         domain: domain.name,
-        name: "@",
+        name: "blog",
         type: "CNAME",
         value: "cname.vercel-dns.com",
         ttl: 60
@@ -78,7 +78,7 @@ export default function Home() {
             Next we need to add the following CNAME record: cname.vercel-dns.com 
           </p>
           <button className="p-4 bg-pink-200" onClick={handleAddDNSRecord}>
-            Add CNAME record
+            Add record and generate SSL Certificate
           </button>
           </> : null
           }
