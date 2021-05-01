@@ -15,7 +15,7 @@ export default function Blog({ posts }) {
 }
 
 export async function getServerSideProps() {
-    const posts = await fetch("http://localhost:3000/api/posts");
+    const posts = await fetch(`${process.env.LIVE_BASE_URL}api/posts`);
     const data = await posts.json();
 
     if (!data) {

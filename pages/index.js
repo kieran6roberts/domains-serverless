@@ -39,7 +39,14 @@ export default function Home() {
     });
 
     const data = await response.json();
-    console.log(data)
+    console.log(data);
+    
+    setDomain({
+      ...domain,
+      ssl: data?.cert?.uid ? true : null,
+      record: data?.dns.uid ? true : null,
+      error: data?.cert?.error ?? null
+    });
   }
 
   return (
@@ -47,17 +54,17 @@ export default function Home() {
       <h1 className="mb-8">
         Welcome to Hashnode
       </h1>
-      <a href={domain ? `https://${domain.name}` : "http://localhost:3000/blog"} className="p-2 bg-pink-200">
+      <a href={domain?.ssl && domain?.record ? `https://${domain.name}` : "http://localhost:3000/blog"} className="block p-2 mb-8 bg-pink-200 w-max">
         To blog
       </a>
       <form onSubmit={handleCustomDomainSubmit}>
         <label 
-        className="mr-4" 
+        className="mr-4 font-bold" 
         htmlFor="domain">
           Enter your custom domain:
           </label>
         <input 
-        className="border-2 border-gray-900" 
+        className="p-2 mb-8 border-2 border-gray-900" 
         onChange={handleInputChange}
         id="domain" 
         type="text" 
@@ -68,14 +75,15 @@ export default function Home() {
           {domain ? 
           <>
           <p className="mb-4">
-            Custom domain has been added: {domain.name}
+            The following custom domain has been added successfully: {domain.name}
           </p>
           <p className="mb-4">
             Next we need to add the following CNAME record: cname.vercel-dns.com 
           </p>
-          <button className="p-4 bg-pink-200" onClick={handleAddDNSRecord}>
+          <button className="p-4 mb-8 bg-pink-200" onClick={handleAddDNSRecord}>
             Add record and generate SSL Certificate
           </button>
+          {domain.error ? <p className="text-pink-600">{domain.error.message}</p> : null}
           </> : null
           }
       </div>

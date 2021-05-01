@@ -3,7 +3,7 @@ export default async function createDomain (req, res) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${process.env.VERCEL_TEST_TOKEN}`
+      "Authorization": "Bearer wAAUPWRAGyfB4t3ygsgTWGfE"
     },
     body: JSON.stringify({ name: req.body })
   });
