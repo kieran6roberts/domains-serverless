@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useState } from "react";
 
 export default function Home() {
@@ -75,9 +76,16 @@ export default function Home() {
       <h1 className="mb-8">
         Welcome to Hashnode
       </h1>
-      <a href={domain.ssl && domain.record ? `https://${domain.name}` : "https://hashnode-project-serverless.vercel.app/blog"} className="block p-2 mb-8 bg-pink-200 w-max">
-        To blog
+      {domain.ssl && domain.record ? 
+      <a href={`https://${domain.name}/blog`}>
+        To Blog
       </a>
+      :
+      <Link href="/blog" passHref>
+        <a className="block p-2 mb-8 bg-pink-200 w-max">
+          To Blog
+        </a>
+      </Link>}
       <form onSubmit={handleCustomDomainSubmit}>
         <label 
         className="mr-4 font-bold" 
