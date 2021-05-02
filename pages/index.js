@@ -5,13 +5,14 @@ export default function Home() {
 
   const [ input, setInput ] = useState("");
   const [ domain, setDomain ] = useState({});
+  const [ projectDomains, setProjectDomains ] = useState([]);
 
   const handleInputChange = (event) => setInput(event.target.value);
 
   const handleCustomDomainSubmit = async (event) => {
     event.preventDefault();
 
-    const response = await fetch("/api/createDomain", {
+    const response = await fetch("/api/addDomainToProject", {
       method: "POST",
       headers: {
               "Content-Type": "application/json"
@@ -19,26 +20,12 @@ export default function Home() {
       body: JSON.stringify(input)
     });
 
-    const { data } = await response.json();
-    console.log(data)
-    setDomain({ ...data.domain, domainError: data?.error ?? null });
-    console.log(domain)
-  };
-
-  const handleAddDomainToProject = async () => {
-    const response = await fetch("/api/addDomainToProject", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        domainName: domain.name,
-      })
-    });
-
     const data = await response.json();
-    return data;
-  }
+    console.log(data)
+
+    setProjectDomains(data);
+    setDomain({ name: input });
+  };
 
   const handleAddDNSRecord = async () => {
     const response = await fetch("/api/addRecordAndCertificate", {
@@ -47,7 +34,7 @@ export default function Home() {
               "Content-Type": "application/json"
           },
       body: JSON.stringify({
-        domain: domain.name,
+        domain: input,
         name: "blog",
         type: "CNAME",
         value: "cname.vercel-dns.com",
@@ -58,16 +45,12 @@ export default function Home() {
     const data = await response.json();
     console.log(data);
 
-    const newProjectDomains = await handleAddDomainToProject();
-    console.log(newProjectDomains)
-
     setDomain({
       ...domain,
-      ssl: data?.cert?.uid ? true : null,
-      record: data?.dns.uid ? true : null,
-      certError: data?.cert?.error ?? null,
-      projectDomains: !newProjectDomains.error ? [...newProjectDomains] : null,
-      projectDomainsError: newProjectDomains.error ?? null
+      cert: data.cert?.uid ?? null,
+      record: data.dns?.uid ?? null,
+      certError: data.cert?.error ?? null,
+      recordError: data.dns?.error ?? null
     });
   }
 
@@ -107,22 +90,28 @@ export default function Home() {
       <p>
         {domain.domainError.message}
       </p> : null}
-      {!domain.domainError && domain.name ? 
+      {projectDomains.length ? 
       <div>
       <p className="mb-4">
         The following custom domain has been added successfully: {domain.name}
       </p>
       <p className="mb-4">
-        Next we need to add the following CNAME record: cname.vercel-dns.com 
+        Next we need to add the following CNAME record: <span className="font-bold">cname.vercel-dns.com</span><br/>
+        With the name of: <span className="font-bold">{input.substr(0, input.indexOf('.'))}</span>
       </p>
       <button className="p-4 mb-8 bg-pink-200" onClick={handleAddDNSRecord}>
         Add record and generate SSL Certificate
       </button>
-      {console.log(domain)}
-      {domain.error ? <p className="text-pink-600">{domain.error.message}</p> : null}
+      {domain.certError ? <p className="text-pink-600">{domain.certError.message}</p> : null}
+      {domain.recordError ? <p className="text-pink-600">{domain.recordError.message}</p> : null}
       </div> : null}
-      {domain.projectDomains && domain.projectDomains.some(({ domain: newDomain }) => newDomain === domain.name) ? 
-      <p>Domain <span className="font-bold">{domain.name}</span> successfully added to project!</p>
+      {domain.cert && domain.record ? 
+      <>
+      <p className="mb-4">New Domain successfully added to project!</p>
+      <a className="inline-block p-2 bg-pink-300" href={`https://${domain.name}`}>
+        Visit domain
+      </a>
+      </>
       : null }
       {domain.projectDomainsError ? <p>{domain.projectDomainsError.message}</p> : null}
     </div>

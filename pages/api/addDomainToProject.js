@@ -15,11 +15,12 @@ export default async function addDomainToProject(req, res) {
             "Authorization": `Bearer ${process.env.VERCEL_TEST_TOKEN}`
         },
         body: JSON.stringify({ 
-            domain: req.body.domainName
+            domain: req.body
          })
     });
 
     const data = await response.json();
+    console.log(data)
 
     return res.status(200).json(data);
 }
