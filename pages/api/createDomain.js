@@ -3,12 +3,12 @@ export default async function createDomain (req, res) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": "Bearer wAAUPWRAGyfB4t3ygsgTWGfE"
+      "Authorization": `Bearer ${process.env.VERCEL_TEST_TOKEN}`
     },
     body: JSON.stringify({ name: req.body })
   });
 
   const data = await domainRes.json();
 
-  return res.json({ data });
+  return res.status(200).json({ data });
 }
